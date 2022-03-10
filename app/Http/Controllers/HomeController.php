@@ -24,11 +24,11 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {
-        $user=Auth::user();
-        $posts=$user->posts;
+    {   
+        $user=Auth::user(); //posts del usuario
+        //$posts=$user->posts;
         //ddd($posts);
-        //$posts=Post::all();
+        $posts=Post::all(); //todos los posts
     return view('home',compact('posts'));
     }
 }

@@ -34,6 +34,12 @@ Route::get('/admin','ProfileController@index')->name('admin')->middleware(['auth
 
 Route::get('/store', 'PostController@store')->name('posts.store');
 
+Route::post('/post/edit', 'PostController@edit')->name('posts.edit');
+
+Route::put('/post/update', 'PostController@update')->name('posts.update');
+
+Route::delete('/destroy/{post}', 'PostController@destroy')->name('posts.destroy');
+
 Auth::routes();
 
 

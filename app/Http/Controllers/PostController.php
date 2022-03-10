@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Post;
 use App\User;
+
 class PostController extends Controller
 {
     /**
@@ -21,7 +22,8 @@ class PostController extends Controller
         } else {
             $posts=Post::all();
         }
-        $posts= Post::all();
+        //$posts= Post::all();
+
         return view('posts.index',compact('posts'));
     }
 
@@ -55,6 +57,7 @@ class PostController extends Controller
         $post->user_id = $user->id;
 
         $post->save();
+        return back();
 
     }
 
@@ -75,15 +78,10 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        $validateData=$request->validate([
-            'title' => 'string|unique:posts|max:90',
-            'content' => 'string'
-
-        ]);
-        $post->update($validateData);
-        return back();
+     
+        return view('posts.edit',['post'=>$post]);
     }
 
     /**
@@ -93,15 +91,20 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+
+    public function update(Request $request, Post $post)
     {
         $validateData=$request->validate([
             'title' => 'string|unique:posts|max:90',
-            'content' => 'string'
+            'contents' => 'string',
+            'user_id' => 'int'
 
         ]);
+        $validateData['user_id']=Auth::user()->id;
+        $validateData['contents']=$request->contents;
+        //ddd($validateData);
         $post->update($validateData);
-        return back();
+        return redirect('/');
 
     }
 
@@ -111,8 +114,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return back();
     }
 }

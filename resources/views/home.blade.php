@@ -4,10 +4,10 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            {{ __('You are logged in!') }}
+            {{ __('Te has logueado correctamente!') }}
             <br><br>
            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header">{{ __('Crear post') }}</div>
             
                 <div class="card-body">
                     @if (session('status'))
@@ -22,6 +22,8 @@
                         <textarea id="contents" name="contents" cols="40" rows="5"></textarea><br><br>
                         <input class="btn btn-primary" type="submit" value="Post">
                     </form>
+
+
                 </div>
             </div>
         </div>
@@ -35,6 +37,22 @@
             <h3>Title: {{$post->title}}</h3>
             {{$post->contents}}  
         </div>
+        <br>
+
+        {{-- usuario solo puede editar/borrar su contenido --}}
+        @if (Auth::user()->id==$post->user_id) 
+            
+        <form method="POST" action="{{route('posts.destroy', $post)}}">
+            @csrf
+            @method('DELETE')
+            <input class="btn btn-danger" type="submit" style="margin:0px 2px 2px 0px" value="Delete">
+       </form>
+
+       <form method="POST" action="{{route('posts.edit', $post)}}">
+        @csrf
+        <input class="btn btn-primary" type="submit" style="margin:0px 2px 2px 0px" value="Edit">
+   </form>
+        @endif
         <br><h2><a>
              
         </a><br></h2>
