@@ -1,8 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Auth\Access\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+use App\Comment;
+use App\Post;
+use App\User;
 
 class CommentController extends Controller
 {
@@ -13,7 +18,14 @@ class CommentController extends Controller
      */
     public function index()
     {
-        //
+        if($user=Auth::user()){
+            $comments=Comment::where('user_id',$user->id)->get();
+        } else {
+            $comments=Comment::all();
+        }
+        //$posts= Post::all();
+
+        return view('home');
     }
 
     /**
@@ -21,9 +33,12 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
     public function create()
     {
-        //
+        $user = Auth::user();
+
+        $this->authorize('create');
     }
 
     /**
@@ -32,9 +47,19 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+
+    public function store(Request $request, Post $post)
     {
-        //
+        $user = Auth::user();
+
+        $comments = new Comment();
+        $comments->comment = $request->get('comment');
+        $comments->post_id = $post->id;
+        $comments->user_id = $user->id;
+
+        $comments->save();
+        return back();
+
     }
 
     /**
@@ -54,10 +79,11 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
-    }
+    // public function edit(Post $post)
+    // {
+     
+    //     return view('posts.edit',['post'=>$post]);
+    // }
 
     /**
      * Update the specified resource in storage.
@@ -66,10 +92,21 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+
+    // public function update(Request $request, Comment $)
+    // {
+    //     $validateData=$request->validate([
+    //         'title' => 'string|unique:posts|max:90',
+    //         'contents' => 'string'
+
+    //     ]);
+    //    // $validateData['user_id']=Auth::user()->id;
+    //     //$validateData['contents']=$request->contents;
+    //     //ddd($validateData);
+    //     $post->update($validateData);
+    //     return redirect('/');
+
+    // }
 
     /**
      * Remove the specified resource from storage.
@@ -77,8 +114,11 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
-    }
+    // public function destroy(Post $post)
+    // {
+    //     $data = Comment::find($id);
+    //     $data->delete
+
+    //     return back();
+    // }
 }

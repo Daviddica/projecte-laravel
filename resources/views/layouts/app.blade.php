@@ -53,13 +53,31 @@
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->username ?? 'Nobody' }}
                                 </a>
-
+                                
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                   
+                                    {{-- Perfil --}}
+                                    <a class="dropdown-item" href="{{ route('profile') }}">
+                                     {{ __('Perfil') }}
+                                     </a>
+
+                                     {{-- Panel de control (solo admin) --}}
+                                     
+                                     @if (Auth::user()->role_id==1) 
+
+                                    <a class="dropdown-item" href="{{ route('controlpanel') }}">
+                                        {{ __('Panel de control') }}
+                                        </a>
+                                       
+                                     @endif
+
+                                    {{-- Cerrar sesión  --}}
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Cerrar sesión') }}
-                                </a>
+                                    </a>
+                                    
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>

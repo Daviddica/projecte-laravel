@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Post;
 use App\User;
+use App\Tag;
 
 class PostController extends Controller
 {
@@ -57,6 +58,17 @@ class PostController extends Controller
         $post->user_id = $user->id;
 
         $post->save();
+
+        // tags
+
+        //separar tags en el array 
+        $tags = explode(',', $request->get('tags'));
+
+        foreach($tags as $tag) {
+            $t=Tag::create(['tag'=>$tag]);
+            $post->tags()->attach($t);
+          }
+
         return back();
 
     }
@@ -96,12 +108,11 @@ class PostController extends Controller
     {
         $validateData=$request->validate([
             'title' => 'string|unique:posts|max:90',
-            'contents' => 'string',
-            'user_id' => 'int'
+            'contents' => 'string'
 
         ]);
-        $validateData['user_id']=Auth::user()->id;
-        $validateData['contents']=$request->contents;
+       // $validateData['user_id']=Auth::user()->id;
+        //$validateData['contents']=$request->contents;
         //ddd($validateData);
         $post->update($validateData);
         return redirect('/');

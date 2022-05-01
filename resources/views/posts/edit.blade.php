@@ -11,7 +11,7 @@
         <form method="POST" action="{{route('posts.update', $post->id)}}">
             @csrf
             @method('PUT')
-
+            
             Titulo <input name="title" type="text" class="form-control"><br>
             Contenido <input name="contents" type="text" class="form-control"><br>
 
