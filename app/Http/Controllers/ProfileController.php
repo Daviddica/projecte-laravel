@@ -19,7 +19,7 @@ class ProfileController extends Controller
     public function index()
     {
         $user=Auth::user();
-        return view('profile')->with('user',$user);
+        return view('profile',['user'=>$user]);
     }
 
 
@@ -30,9 +30,9 @@ class ProfileController extends Controller
      */
      public function edit(User $user)
     {   
-        $user=Auth::user();
+         $user=Auth::user();
 
-        return view('profile.edit',['user'=>$user]);
+         return view('profile.edit',['user'=>$user]);
     }
 
     /**
@@ -55,7 +55,7 @@ class ProfileController extends Controller
         //$validateData['contents']=$request->contents;
         //ddd($validateData);
         $user->update($validateData);
-        return back();
+        return redirect('profile');
 
     }
 
